@@ -5,12 +5,6 @@
              android:background="@color/background_black"
              tools:context="dance.wakeywakey.SetAlarmFragment">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Set Alarm"
-        android:textColor="@color/text_white"/>
-
     <ScrollView
         android:id="@+id/content"
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -35,12 +29,16 @@
                 android:layout_marginTop="30dp"
                 android:text="I want to wake up at"
                 android:textColor="@color/text_white"
-                android:textSize="30sp"/>
+                android:textSize="30sp"
+                />
 
             <TimePicker
+                android:id="@+id/time_picker"
+                style="@style/MyHoloTimePicker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"/>
+                android:layout_margin="20dp"
+                />
 
         </LinearLayout>
 

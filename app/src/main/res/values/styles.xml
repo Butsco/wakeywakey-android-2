@@ -5,4 +5,9 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="MyHoloTimePicker" parent="android:Theme.Holo.Light">
+        <item name="android:color">#EEEEEE</item>
+        <item name="android:background">#FFFFFF</item>
+    </style>
+
 </resources>
