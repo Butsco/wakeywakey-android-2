@@ -10,20 +10,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="7dp"
-        android:paddingBottom="3dp"
+        android:paddingBottom="7dp"
         android:paddingLeft="10dp"
-        android:textColor="@color/text_white"
-        android:id="@+id/text">
+        android:textColor="@color/background_orange"
+        android:background="@color/background_grey"
+        android:id="@+id/text"
+        android:text="A">
 
     </TextView>
 
-    <View
-        android:id="@+id/line"
-        android:background="@color/divider"
-        android:layout_width="match_parent"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_height="3dp"
-        android:paddingBottom="3dp" />
 
 </LinearLayout>
