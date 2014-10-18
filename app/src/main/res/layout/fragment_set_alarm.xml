@@ -32,12 +32,14 @@
                 android:textSize="30sp"
                 />
 
-            <TimePicker
+            <TextView
                 android:id="@+id/time_picker"
-                style="@style/MyHoloTimePicker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
+                android:textColor="@color/text_white"
+                android:text="8:00"
+                android:textSize="60sp"
                 />
 
         </LinearLayout>
