@@ -2,7 +2,7 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             android:background="@color/background_black"
+             android:background="@color/background_blue"
              tools:context="dance.wakeywakey.SetAlarmFragment">
 
     <ScrollView
@@ -17,11 +17,14 @@
             android:gravity="center"
             android:orientation="vertical">
 
+
             <ImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_marginLeft="25dp"
+                android:layout_width="191dp"
+                android:layout_height="174dp"
                 android:layout_marginTop="60dp"
-                android:src="@drawable/ic_launcher"/>
+                android:src="@drawable/clock"/>
+
 
             <TextView
                 android:layout_width="wrap_content"
@@ -37,8 +40,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
-                android:textColor="@color/text_white"
                 android:text="8:00"
+                android:textColor="@color/text_white"
                 android:textSize="60sp"
                 />
 
