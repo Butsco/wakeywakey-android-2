@@ -6,15 +6,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.sleepbot.datetimepicker.time.RadialPickerLayout;
 import com.sleepbot.datetimepicker.time.TimePickerDialog;
 
 import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 /**
  * Created by bert on 18/10/14.
@@ -44,11 +43,11 @@ public class SetAlarmFragment extends Fragment implements TimePickerDialog.OnTim
             public void onClick(View v) {
                 timePickerDialog.setCloseOnSingleTapMinute(false);
                 timePickerDialog.initialize(SetAlarmFragment.this, alarmHour, alarmMinutes, true, false);
-                timePickerDialog.show(getActivity().getSupportFragmentManager(), Contants.TAG);
+                timePickerDialog.show(getActivity().getSupportFragmentManager(), Constants.TAG);
             }
         });
 
-        setAlarmTime(alarmHour, alarmMinutes);
+        timePickerTextView.setText(String.format("x:xx", alarmHour, alarmMinutes));
     }
 
     private void setAlarmTime(int hour, int minutes) {
@@ -56,6 +55,19 @@ public class SetAlarmFragment extends Fragment implements TimePickerDialog.OnTim
         alarmMinutes = minutes;
 
         timePickerTextView.setText(String.format("%d:%02d", alarmHour, alarmMinutes));
+
+
+        GregorianCalendar gc = new GregorianCalendar();
+        gc.setTimeZone(TimeZone.getDefault());
+        gc.set(GregorianCalendar.HOUR_OF_DAY, alarmHour);
+        gc.set(GregorianCalendar.MINUTE, alarmMinutes);
+        gc.set(GregorianCalendar.SECOND, 0);
+        gc.add(Calendar.DATE, 1);
+
+        int timeInSeconds = (int) (gc.getTimeInMillis() / 1000l);
+
+
+        ((MainActivity) getActivity()).addDataToPost("timestamp", String.valueOf(timeInSeconds));
     }
 
     @Override
