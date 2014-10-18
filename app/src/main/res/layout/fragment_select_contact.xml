@@ -5,12 +5,15 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <TextView
-
-        android:textColor="@color/text_white"
+    <se.emilsjolander.stickylistheaders.StickyListHeadersListView
+        android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="select contact"/>
+        android:background="@color/background_black"
+        android:fastScrollAlwaysVisible="false"
+        android:fastScrollEnabled="true"
+        android:focusable="true"
+        android:visibility="visible" />
 
 
 </LinearLayout>

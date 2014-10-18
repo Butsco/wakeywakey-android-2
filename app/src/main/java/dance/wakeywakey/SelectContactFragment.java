@@ -142,6 +142,6 @@ public class SelectContactFragment extends Fragment implements LoaderManager.Loa
 
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
-        
+
     }
 }
