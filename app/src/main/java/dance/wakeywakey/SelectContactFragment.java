@@ -3,9 +3,9 @@ package dance.wakeywakey;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,10 +18,15 @@ import com.google.i18n.phonenumbers.Phonenumber;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
+import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 /**
  * Created by bert on 18/10/14.
@@ -38,7 +43,9 @@ public class SelectContactFragment extends Fragment implements LoaderManager.Loa
 
     private Cursor contactsCursor;
     private Cursor numberCursor;
-    HashMap<Integer, MyContact> list;
+    ArrayList<MyContact> data;
+    ContactAdapter adapter;
+    StickyListHeadersListView listView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -48,6 +55,13 @@ public class SelectContactFragment extends Fragment implements LoaderManager.Loa
         getLoaderManager().initLoader(PHONE_NUMBER_LOADER, null, this);
 
         return rootView;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        listView = (StickyListHeadersListView) getActivity().findViewById(android.R.id.list);
+        listView.setFastScrollEnabled(true);
     }
 
     @Override
@@ -77,11 +91,15 @@ public class SelectContactFragment extends Fragment implements LoaderManager.Loa
     private void showList() {
         if (contactsLoaded && numbersLoaded) {
             setData();
+
+            adapter = new ContactAdapter(getActivity(), data);
+            listView.setAdapter(adapter);
         }
     }
 
     private void setData() {
-        list = new HashMap<Integer, MyContact>();
+        data = new ArrayList<MyContact>();
+        HashMap<Integer, MyContact> contacts = new HashMap<Integer, MyContact>();
 
         for (contactsCursor.moveToFirst(); !contactsCursor.isAfterLast(); contactsCursor.moveToNext()) {
             MyContact contact = new MyContact();
@@ -98,7 +116,7 @@ public class SelectContactFragment extends Fragment implements LoaderManager.Loa
                 contact.lastName = "";
             }
 
-            list.put(Integer.valueOf(contact.id), contact);
+            contacts.put(Integer.valueOf(contact.id), contact);
         }
 
         for (numberCursor.moveToFirst(); !numberCursor.isAfterLast(); numberCursor.moveToNext()) {
@@ -118,26 +136,31 @@ public class SelectContactFragment extends Fragment implements LoaderManager.Loa
                 Log.i(TAG, "cannot parse number " + number);
             }
 
-            if (list.containsKey(id)) {
-                list.get(id).tels.add(number);
+            if (contacts.containsKey(id)) {
+                contacts.get(id).tels.add(number);
             }
         }
 
         contactsCursor.close();
         numberCursor.close();
 
-        Iterator it = list.entrySet().iterator();
+        Iterator it = contacts.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry pairs = (Map.Entry) it.next();
             Integer key = (Integer) pairs.getKey();
             MyContact contact = (MyContact) pairs.getValue();
 
             if (contact.tels == null) {
-                list.remove(key);
+                contacts.remove(key);
+            } else {
+                data.add(contact);
             }
 
             Log.d(TAG, "contact: " + contact.firstName + " " + contact.lastName + " " + StringUtils.join(contact.tels, ", "));
         }
+
+        // sort by name
+        Collections.sort(data, new NameComparator());
     }
 
     @Override

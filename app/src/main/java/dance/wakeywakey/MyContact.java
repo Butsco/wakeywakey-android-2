@@ -10,5 +10,14 @@ final public class MyContact {
     public String firstName = "";
     public String lastName = "";
     public HashSet<String> tels = new HashSet<String>();
+
+    public String getName() {
+        if (firstName == null || firstName.equals("")) {
+            return lastName;
+        } else if (lastName == null || lastName.equals("")) {
+            return firstName;
+        }
+        return firstName + " " + lastName;
+    }
 }
 
