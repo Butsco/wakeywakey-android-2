@@ -1,8 +1,8 @@
 package dance.wakeywakey;
 
-import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -10,11 +10,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -29,7 +24,6 @@ import org.apache.http.util.EntityUtils;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -39,8 +33,8 @@ public class MainActivity extends FragmentActivity {
     private String postUrl = "http://wakey-env.elasticbeanstalk.com/v1/alarms/?access_token=wham";
 
     private static final int NUM_PAGES = 3;
-    private ViewPager mPager;
-    private PagerAdapter mPagerAdapter;
+    private ViewPager viewPager;
+    private PagerAdapter pagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,21 +42,21 @@ public class MainActivity extends FragmentActivity {
         setContentView(R.layout.activity_main);
 
         // Instantiate a ViewPager and a PagerAdapter.
-        mPager = (ViewPager) findViewById(R.id.pager);
-        mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
-        mPager.setAdapter(mPagerAdapter);
-        mPager.setPageTransformer(true, new DepthPageTransformer());
+        viewPager = (ViewPager) findViewById(R.id.pager);
+        pagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(pagerAdapter);
+        viewPager.setPageTransformer(true, new DepthPageTransformer());
     }
 
     @Override
     public void onBackPressed() {
-        if (mPager.getCurrentItem() == 0) {
+        if (viewPager.getCurrentItem() == 0) {
             // If the user is currently looking at the first step, allow the system to handle the
             // Back button. This calls finish() on this activity and pops the back stack.
             super.onBackPressed();
         } else {
             // Otherwise, select the previous step.
-            mPager.setCurrentItem(mPager.getCurrentItem() - 1);
+            viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
         }
     }
 
@@ -146,5 +140,18 @@ public class MainActivity extends FragmentActivity {
         addDataToPost("mood", "happy");
 
         sendTask.execute(null, null, null);
+    }
+
+    public void nextSlideWithDelay() {
+        final Handler h = new Handler();
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                // do first stuff
+                viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
+            }
+        };
+
+        h.postDelayed(r, 1000); // 1 second delay
     }
 }

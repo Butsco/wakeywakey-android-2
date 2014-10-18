@@ -56,7 +56,6 @@ public class SetAlarmFragment extends Fragment implements TimePickerDialog.OnTim
 
         timePickerTextView.setText(String.format("%d:%02d", alarmHour, alarmMinutes));
 
-
         GregorianCalendar gc = new GregorianCalendar();
         gc.setTimeZone(TimeZone.getDefault());
         gc.set(GregorianCalendar.HOUR_OF_DAY, alarmHour);
@@ -66,8 +65,8 @@ public class SetAlarmFragment extends Fragment implements TimePickerDialog.OnTim
 
         int timeInSeconds = (int) (gc.getTimeInMillis() / 1000l);
 
-
         ((MainActivity) getActivity()).addDataToPost("timestamp", String.valueOf(timeInSeconds));
+        ((MainActivity) getActivity()).nextSlideWithDelay();
     }
 
     @Override

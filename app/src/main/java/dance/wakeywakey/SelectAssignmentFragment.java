@@ -26,7 +26,7 @@ public class SelectAssignmentFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // send data
-        ((MainActivity) getActivity()).sendPost();
+        //((MainActivity) getActivity()).sendPost();
     }
 }
 
