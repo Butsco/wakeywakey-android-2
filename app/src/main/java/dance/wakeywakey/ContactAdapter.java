@@ -22,16 +22,16 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
  */
 public class ContactAdapter extends BaseAdapter implements SectionIndexer, StickyListHeadersAdapter {
 
-    private final Context context;
+    private final SelectContactFragment context;
     private LayoutInflater inflater;
     private int[] mSectionIndices;
     private Character[] mSectionLetters;
 
     private ArrayList<MyContact> contacts = new ArrayList<MyContact>();
 
-    public ContactAdapter(Context context, ArrayList<MyContact> contacts) {
+    public ContactAdapter(SelectContactFragment context, ArrayList<MyContact> contacts) {
         this.context = context;
-        this.inflater = LayoutInflater.from(context);
+        this.inflater = LayoutInflater.from(context.getActivity());
         this.contacts = contacts;
     }
 
@@ -70,6 +70,12 @@ public class ContactAdapter extends BaseAdapter implements SectionIndexer, Stick
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
+        }
+
+        if (position == context.getSelectedPosition()) {
+            convertView.setBackgroundColor(context.getActivity().getResources().getColor(R.color.background_orange));
+        } else {
+            convertView.setBackgroundColor(context.getActivity().getResources().getColor(R.color.background_black));
         }
 
         // name

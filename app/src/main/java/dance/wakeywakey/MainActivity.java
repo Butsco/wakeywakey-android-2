@@ -33,7 +33,7 @@ public class MainActivity extends FragmentActivity {
     private String postUrl = "http://wakey-env.elasticbeanstalk.com/v1/alarms/?access_token=wham";
 
     private static final int NUM_PAGES = 3;
-    private ViewPager viewPager;
+    private ViewPagerCustomDuration viewPager;
     private PagerAdapter pagerAdapter;
 
     @Override
@@ -42,10 +42,11 @@ public class MainActivity extends FragmentActivity {
         setContentView(R.layout.activity_main);
 
         // Instantiate a ViewPager and a PagerAdapter.
-        viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager = (ViewPagerCustomDuration) findViewById(R.id.pager);
         pagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(pagerAdapter);
         viewPager.setPageTransformer(true, new DepthPageTransformer());
+        viewPager.setOffscreenPageLimit(NUM_PAGES-1);
     }
 
     @Override
@@ -56,7 +57,9 @@ public class MainActivity extends FragmentActivity {
             super.onBackPressed();
         } else {
             // Otherwise, select the previous step.
+            viewPager.setScrollDurationFactor(3);
             viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
+            viewPager.setScrollDurationFactor(1);
         }
     }
 
@@ -135,8 +138,7 @@ public class MainActivity extends FragmentActivity {
 
     public void sendPost() {
         addDataToPost("from", "32474418798");
-        addDataToPost("to", "32470876752");
-        addDataToPost("fromName", "Bertus");
+        addDataToPost("fromName", "Bert");
         addDataToPost("mood", "happy");
 
         sendTask.execute(null, null, null);
@@ -147,8 +149,9 @@ public class MainActivity extends FragmentActivity {
         Runnable r = new Runnable() {
             @Override
             public void run() {
-                // do first stuff
+                viewPager.setScrollDurationFactor(3);
                 viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
+                viewPager.setScrollDurationFactor(1);
             }
         };
 

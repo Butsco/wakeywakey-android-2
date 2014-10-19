@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
@@ -21,7 +22,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -31,7 +31,7 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 /**
  * Created by bert on 18/10/14.
  */
-public class SelectContactFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class SelectContactFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemClickListener {
 
     public static final String TAG = "SelectContactsFragment";
 
@@ -46,6 +46,8 @@ public class SelectContactFragment extends Fragment implements LoaderManager.Loa
     ArrayList<MyContact> data;
     ContactAdapter adapter;
     StickyListHeadersListView listView;
+
+    private int selectedPosition = -1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -92,8 +94,9 @@ public class SelectContactFragment extends Fragment implements LoaderManager.Loa
         if (contactsLoaded && numbersLoaded) {
             setData();
 
-            adapter = new ContactAdapter(getActivity(), data);
+            adapter = new ContactAdapter(this, data);
             listView.setAdapter(adapter);
+            listView.setOnItemClickListener(this);
         }
     }
 
@@ -166,5 +169,25 @@ public class SelectContactFragment extends Fragment implements LoaderManager.Loa
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
 
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        setSelectedPosition(position);
+        adapter.notifyDataSetChanged();
+
+        if (data != null && data.size() >= position) {
+            MyContact contact = data.get(position);
+            ((MainActivity) getActivity()).addDataToPost("to", contact.getFirstMsisdn());
+            ((MainActivity) getActivity()).nextSlideWithDelay();
+        }
+    }
+
+    public int getSelectedPosition() {
+        return selectedPosition;
+    }
+
+    public void setSelectedPosition(int selectedPosition) {
+        this.selectedPosition = selectedPosition;
     }
 }

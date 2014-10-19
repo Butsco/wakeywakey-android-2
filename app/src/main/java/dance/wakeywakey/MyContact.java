@@ -1,5 +1,11 @@
 package dance.wakeywakey;
 
+import com.google.i18n.phonenumbers.NumberParseException;
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.Phonenumber;
+
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.HashSet;
 
 /**
@@ -18,6 +24,26 @@ final public class MyContact {
             return firstName;
         }
         return firstName + " " + lastName;
+    }
+
+    public String getFirstMsisdn() {
+        for (String number : tels) {
+            try {
+                PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
+                Phonenumber.PhoneNumber phoneNumber = null;
+                phoneNumber = phoneUtil.parse(number, "BE");
+                boolean isValid = phoneUtil.isValidNumber(phoneNumber);
+                if (isValid) {
+                    number = phoneUtil.format(phoneNumber, PhoneNumberUtil.PhoneNumberFormat.E164);
+                }
+
+                return StringUtils.substring(number, 1);
+            } catch (NumberParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return "";
     }
 }
 
