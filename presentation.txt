@@ -1,0 +1,17 @@
+
+
+Is everybody still awake? Getting tired huh. Imagine how you will feel tomorrow morning when that alarm clock is ringing... That snooze button will be really attractive to be pressed, right?
+
+
+We are Bert and Maarten, we are from Belgium and created an android app to help you wake up tomorrow.
+The app is called Wakey Wakey, it uses the Twillio api and will help you get out of bed in a cheerful way.
+
+In our app you first pick the time to wake up.
+
+Then you select a friend that will help you wake up.
+
+How would you like to be waken up? Want your friend to sing a song, tell a joke or maybe wish you succes for your big day?
+
+Now the alarm is set and Maarten will receive ans sms and a call with Twilio at the wake-up time. When he picks up my phone will start ringing and Maarten can wake me up in a cheerful. Sooo much better than that snooze button :)
+
+SO the technology we used: Twilio, node.js, elastic beanstalk and android.
