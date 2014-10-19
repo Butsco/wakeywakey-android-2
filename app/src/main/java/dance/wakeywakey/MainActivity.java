@@ -37,6 +37,8 @@ public class MainActivity extends FragmentActivity {
     public static final int PAGE_SELECT_ASSIGNMENT = 2;
     public static final int PAGE_COMPLETE = 3;
 
+    public static final boolean AUTO_SLIDE = false;
+
     private HashMap<String, String> postData = new HashMap<String, String>();
     private String postUrl = "http://wakey-env.elasticbeanstalk.com/v1/alarms/?access_token=wham";
 
@@ -183,17 +185,19 @@ public class MainActivity extends FragmentActivity {
     }
 
     public void nextSlideWithDelay() {
-        final Handler h = new Handler();
-        Runnable r = new Runnable() {
-            @Override
-            public void run() {
-                viewPager.setScrollDurationFactor(3);
-                viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
-                viewPager.setScrollDurationFactor(1);
-            }
-        };
+        if (AUTO_SLIDE) {
+            final Handler h = new Handler();
+            Runnable r = new Runnable() {
+                @Override
+                public void run() {
+                    viewPager.setScrollDurationFactor(3);
+                    viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
+                    viewPager.setScrollDurationFactor(1);
+                }
+            };
 
-        h.postDelayed(r, 1000); // 1 second delay
+            h.postDelayed(r, 1000); // 1 second delay
+        }
     }
 
     public String getCompleteMessage() {
