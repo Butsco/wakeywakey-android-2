@@ -179,6 +179,8 @@ public class SelectContactFragment extends Fragment implements LoaderManager.Loa
         if (data != null && data.size() >= position) {
             MyContact contact = data.get(position);
             ((MainActivity) getActivity()).addDataToPost("to", contact.getFirstMsisdn());
+            ((MainActivity) getActivity()).addDataToPost("toName", contact.getName());
+            ((MainActivity) getActivity()).addDataToPost("toFirstName", contact.firstName);
             ((MainActivity) getActivity()).nextSlideWithDelay();
         }
     }

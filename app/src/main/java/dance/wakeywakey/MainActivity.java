@@ -32,7 +32,7 @@ public class MainActivity extends FragmentActivity {
     private HashMap<String, String> postData = new HashMap<String, String>();
     private String postUrl = "http://wakey-env.elasticbeanstalk.com/v1/alarms/?access_token=wham";
 
-    private static final int NUM_PAGES = 3;
+    private static final int NUM_PAGES = 4;
     private ViewPagerCustomDuration viewPager;
     private PagerAdapter pagerAdapter;
 
@@ -81,6 +81,9 @@ public class MainActivity extends FragmentActivity {
                     break;
                 case 2:
                     fragment = new SelectAssignmentFragment();
+                    break;
+                case 3:
+                    fragment = new CompleteFragment();
                     break;
                 default:
                     return null;
@@ -134,6 +137,13 @@ public class MainActivity extends FragmentActivity {
 
     public void addDataToPost(String key, String value) {
         postData.put(key, value);
+    }
+
+    public String getData(String key) {
+        if (postData.containsKey(key)) {
+            return postData.get(key);
+        }
+        return "";
     }
 
     public void sendPost() {
