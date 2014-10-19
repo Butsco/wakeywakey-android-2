@@ -163,7 +163,7 @@ public class MainActivity extends FragmentActivity {
         if (!isSent) {
             isSent = true;
 
-            //sendTask.execute(null, null, null);
+            sendTask.execute(null, null, null);
 
             Intent intent = new Intent(this, MainActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
