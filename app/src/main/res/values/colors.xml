@@ -9,4 +9,6 @@
     <color name="text_white">#EEEEEE</color>
     <color name="text_soft_white_on_green">#d7ffea</color>
     <color name="divider">#666666</color>
+    <color name="background_light_red">#e74c3c</color>
+    <color name="background_dark_red">#c84234</color>
 </resources>

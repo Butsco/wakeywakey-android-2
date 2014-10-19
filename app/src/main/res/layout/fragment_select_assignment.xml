@@ -5,11 +5,55 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <TextView
-        android:textColor="@color/text_white"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="select assignment"/>
+        android:layout_height="110dp"
+        android:background="@color/background_light_red"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_marginTop="12dp"
+            android:layout_marginLeft="20dp"
+            android:layout_width="86dp"
+            android:layout_height="86dp"
+            android:src="@drawable/heart"/>
+
+        <LinearLayout
+            android:layout_marginTop="23dp"
+            android:layout_marginLeft="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="How would you like"
+                android:textColor="@color/text_white"
+                android:fontFamily="sans-serif"
+                android:textSize="24dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="to be woken up?"
+                android:textColor="@color/text_white"
+                android:fontFamily="sans-serif"
+                android:textSize="24dp"/>
 
 
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:background="@color/background_dark_red"></LinearLayout>
+
+
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></ListView>
 </LinearLayout>
