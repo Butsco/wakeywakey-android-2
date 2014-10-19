@@ -3,17 +3,16 @@ package dance.wakeywakey;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 /**
  * Created by bert on 19/10/14.
  */
-public class CompleteFragment extends Fragment {
+public class CompleteFragment extends Fragment implements ViewPager.OnPageChangeListener {
 
     private TextView completeMessageTextView;
 
@@ -27,14 +26,33 @@ public class CompleteFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         completeMessageTextView = (TextView) view.findViewById(R.id.complete_message);
+
+        ((MainActivity) getActivity()).viewPager.setOnPageChangeListener(this);
     }
 
-    public void onPageSelected(int position) {
-        MainActivity mainActivity = (MainActivity) getActivity();
+    public void onPageSelected() {
 
-        String name = mainActivity.getData("toFirstName");
-        String time = mainActivity.getData("timeString");
-        String message = String.format(getString(R.string.complete_message), name, time);
-        completeMessageTextView.setText(message);
+
+    }
+
+    @Override
+    public void onPageScrolled(int i, float v, int i2) {
+
+    }
+
+    @Override
+    public void onPageSelected(int i) {
+        if (i == MainActivity.PAGE_COMPLETE) {
+            MainActivity mainActivity = (MainActivity) getActivity();
+            String message = mainActivity.getCompleteMessage();
+            CompleteFragment.this.completeMessageTextView.setText(message);
+
+            mainActivity.sendPost();
+        }
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int i) {
+
     }
 }

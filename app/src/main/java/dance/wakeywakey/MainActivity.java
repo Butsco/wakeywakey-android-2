@@ -1,5 +1,9 @@
 package dance.wakeywakey;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -7,8 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import org.apache.http.HttpResponse;
@@ -29,12 +32,20 @@ import java.util.Iterator;
 
 
 public class MainActivity extends FragmentActivity {
+    public static final int PAGE_SET_ALARM = 0;
+    public static final int PAGE_SELECT_CONTACT = 1;
+    public static final int PAGE_SELECT_ASSIGNMENT = 2;
+    public static final int PAGE_COMPLETE = 3;
+
     private HashMap<String, String> postData = new HashMap<String, String>();
     private String postUrl = "http://wakey-env.elasticbeanstalk.com/v1/alarms/?access_token=wham";
 
     private static final int NUM_PAGES = 4;
-    private ViewPagerCustomDuration viewPager;
-    private PagerAdapter pagerAdapter;
+    public ViewPagerCustomDuration viewPager;
+    private ScreenSlidePagerAdapter pagerAdapter;
+    private int NOTIFICATION = R.string.app_name;
+
+    private boolean isSent = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +57,7 @@ public class MainActivity extends FragmentActivity {
         pagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(pagerAdapter);
         viewPager.setPageTransformer(true, new DepthPageTransformer());
-        viewPager.setOffscreenPageLimit(NUM_PAGES-1);
+        viewPager.setOffscreenPageLimit(NUM_PAGES - 1);
     }
 
     @Override
@@ -73,16 +84,16 @@ public class MainActivity extends FragmentActivity {
             Fragment fragment;
 
             switch (position) {
-                case 0:
+                case PAGE_SET_ALARM:
                     fragment = new SetAlarmFragment();
                     break;
-                case 1:
+                case PAGE_SELECT_CONTACT:
                     fragment = new SelectContactFragment();
                     break;
-                case 2:
+                case PAGE_SELECT_ASSIGNMENT:
                     fragment = new SelectAssignmentFragment();
                     break;
-                case 3:
+                case PAGE_COMPLETE:
                     fragment = new CompleteFragment();
                     break;
                 default:
@@ -117,15 +128,13 @@ public class MainActivity extends FragmentActivity {
                 post.setEntity(new UrlEncodedFormEntity(nameValuePair, "UTF-8"));
                 HttpResponse response = client.execute(post);
                 StatusLine statusLine = response.getStatusLine();
-                if(statusLine.getStatusCode() == HttpURLConnection.HTTP_OK){
+                if (statusLine.getStatusCode() == HttpURLConnection.HTTP_OK) {
                     result = EntityUtils.toByteArray(response.getEntity());
                     str = new String(result, "UTF-8");
                 }
-            }
-            catch (UnsupportedEncodingException e) {
+            } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
@@ -151,7 +160,26 @@ public class MainActivity extends FragmentActivity {
         addDataToPost("fromName", "Bert");
         addDataToPost("mood", "happy");
 
-        sendTask.execute(null, null, null);
+        if (!isSent) {
+            isSent = true;
+
+            //sendTask.execute(null, null, null);
+
+            Intent intent = new Intent(this, MainActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
+            Notification notification = new NotificationCompat.Builder(this)
+                    .setContentTitle(getString(R.string.app_name))
+                    .setContentText(getCompleteMessage())
+                    .setSmallIcon(R.drawable.ic_launcher)
+                    .setOngoing(true)
+                    .setContentIntent(pendingIntent)
+                    .build();
+
+            // Send the notification.
+            NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            notificationManager.notify(NOTIFICATION, notification);
+        }
     }
 
     public void nextSlideWithDelay() {
@@ -166,5 +194,24 @@ public class MainActivity extends FragmentActivity {
         };
 
         h.postDelayed(r, 1000); // 1 second delay
+    }
+
+    public String getCompleteMessage() {
+        String name = getData("toFirstName");
+
+        if (name.equals("")) {
+            name = getData("toName");
+        }
+
+        String time = getData("timeString");
+        return String.format(getString(R.string.complete_message), name, time);
+    }
+
+    @Override
+    protected void onDestroy() {
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.cancel(NOTIFICATION);
+
+        super.onDestroy();
     }
 }

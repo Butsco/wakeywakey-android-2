@@ -24,9 +24,6 @@ public class SelectAssignmentFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        // send data
-        //((MainActivity) getActivity()).sendPost();
     }
 }
 
